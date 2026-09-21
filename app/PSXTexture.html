@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>PSX Texture Lab</title>
+  <style>
+    :root{color-scheme:dark;--bg:#090b0f;--panel:#11151c;--panel2:#161b24;--line:#252c38;--text:#f4f7fb;--muted:#8994a5;--lime:#b8f34a;--cyan:#50d8ff;--danger:#ff6577;--shadow:0 18px 55px #0008}
+    *{box-sizing:border-box}html,body{height:100%}body{margin:0;background:radial-gradient(circle at 80% -20%,#193042 0,transparent 32%),var(--bg);color:var(--text);font:14px/1.4 Inter,ui-sans-serif,system-ui,sans-serif;overflow:hidden}
+    button,input,select{font:inherit}.app{height:100vh;display:grid;grid-template-rows:64px 1fr}.topbar{display:flex;align-items:center;gap:18px;padding:0 22px;border-bottom:1px solid var(--line);background:#0d1016dd;backdrop-filter:blur(18px);z-index:2}.brand{font-size:17px;font-weight:850;letter-spacing:-.02em;white-space:nowrap}.brand i{color:var(--lime);font-style:normal}.tag{font-size:11px;padding:3px 7px;border:1px solid #384152;border-radius:5px;color:var(--muted)}.status{margin-left:auto;display:flex;align-items:center;gap:8px;color:var(--muted);font-size:12px}.dot{width:7px;height:7px;border-radius:50%;background:#536073}.status.live .dot{background:var(--lime);box-shadow:0 0 12px var(--lime)}
+    .workspace{min-height:0;display:grid;grid-template-columns:310px 1fr}.sidebar{overflow:auto;padding:18px;border-right:1px solid var(--line);background:#0d1015}.section{padding:0 2px 18px;margin-bottom:18px;border-bottom:1px solid var(--line)}.section:last-child{border:0}.section-title{display:flex;align-items:center;justify-content:space-between;margin:0 0 12px;font-size:11px;text-transform:uppercase;letter-spacing:.13em;color:#a9b3c2;font-weight:800}
+    .drop{display:block;padding:20px 14px;border:1px dashed #3c4658;border-radius:10px;text-align:center;background:#111720;cursor:pointer;transition:.2s}.drop:hover,.drop.drag{border-color:var(--cyan);background:#12212b}.drop strong{display:block;margin-bottom:4px}.drop span{color:var(--muted);font-size:12px}.drop input{display:none}.file-name{margin-top:8px;color:var(--cyan);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}
+    label.caption{display:flex;justify-content:space-between;margin:12px 0 6px;color:#aab4c4;font-size:12px;font-weight:650}.field-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.input,.select{width:100%;height:38px;padding:0 10px;color:var(--text);background:#090c11;border:1px solid var(--line);border-radius:7px;outline:none}.input:focus,.select:focus{border-color:var(--cyan)}.hint{margin-top:6px;color:#687487;font-size:11px}.range{width:100%;accent-color:var(--lime)}.switch-row{display:flex;align-items:center;justify-content:space-between;margin-top:13px}.switch{position:relative;width:38px;height:22px}.switch input{opacity:0}.switch span{position:absolute;inset:0;background:#28303d;border-radius:20px;cursor:pointer}.switch span:after{content:"";position:absolute;width:16px;height:16px;left:3px;top:3px;border-radius:50%;background:#fff;transition:.18s}.switch input:checked+span{background:var(--lime)}.switch input:checked+span:after{transform:translateX(16px);background:#172008}
+    .download{display:flex;align-items:center;justify-content:center;height:42px;border-radius:8px;background:var(--lime);color:#11170a;text-decoration:none;font-weight:850;transition:.15s}.download:hover{filter:brightness(1.08);transform:translateY(-1px)}.download.disabled{pointer-events:none;opacity:.35}.live-note{text-align:center;color:var(--muted);font-size:11px;margin-top:9px}
+    .stage{min-width:0;min-height:0;display:grid;grid-template-rows:auto 1fr;padding:18px;gap:14px}.metrics{display:grid;grid-template-columns:1fr 1fr 1.15fr;gap:10px}.metric{min-width:0;padding:12px 14px;background:var(--panel);border:1px solid var(--line);border-radius:9px}.metric small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.1em}.metric strong{display:block;margin-top:3px;font-size:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.metric.accent strong{color:var(--lime)}
+    .compare{min-height:0;display:grid;grid-template-columns:1fr 1fr;gap:14px}.viewer{min-width:0;min-height:0;display:grid;grid-template-rows:42px 1fr;background:var(--panel);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}.viewer-head{display:flex;align-items:center;padding:0 14px;border-bottom:1px solid var(--line);background:var(--panel2);font-weight:750}.viewer-head span{margin-left:auto;color:var(--muted);font-size:11px;font-weight:500}.canvas{position:relative;min-height:0;display:grid;place-items:center;overflow:hidden;background-color:#0c0f14;background-image:linear-gradient(45deg,#151a22 25%,transparent 25%),linear-gradient(-45deg,#151a22 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#151a22 75%),linear-gradient(-45deg,transparent 75%,#151a22 75%);background-size:20px 20px;background-position:0 0,0 10px,10px -10px,-10px 0}.canvas img{display:block;max-width:100%;max-height:100%;object-fit:contain;image-rendering:pixelated}.empty{position:absolute;text-align:center;color:#657184}.empty b{display:block;color:#9ba6b6;margin-bottom:5px}.loading:after{content:"";position:absolute;width:34px;height:34px;border:3px solid #ffffff18;border-top-color:var(--lime);border-radius:50%;animation:spin .7s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}.error{color:var(--danger)!important}
+    @media(max-width:900px){body{overflow:auto}.app{height:auto;min-height:100vh}.workspace{grid-template-columns:1fr}.sidebar{border-right:0;border-bottom:1px solid var(--line)}.stage{min-height:850px}.compare{grid-template-columns:1fr}.viewer{min-height:370px}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar"><div class="brand">PSX <i>Texture Lab</i></div><span class="tag">LOCAL</span><div class="status" id="status"><span class="dot"></span><span id="statusText">Choose an image</span></div></header>
+  <main class="workspace">
+    <aside class="sidebar">
+      <section class="section">
+        <h2 class="section-title">Source</h2>
+        <label class="drop" id="drop"><strong>Drop an image here</strong><span>or click to browse</span><input id="file" type="file" accept="image/*"><div class="file-name" id="fileName"></div></label>
+      </section>
+      <section class="section">
+        <h2 class="section-title">Dimensions</h2>
+        <div class="field-row"><div><label class="caption" for="width">Width</label><input class="input live" id="width" type="number" min="0" max="16384" placeholder="Auto"></div><div><label class="caption" for="height">Height</label><input class="input live" id="height" type="number" min="0" max="16384" placeholder="Auto"></div></div>
+        <label class="caption" for="ar">Aspect ratio</label><input class="input live" id="ar" placeholder="Source ratio · e.g. 1:1"><div class="hint">One dimension preserves source ratio. Ratio overrides the missing side.</div>
+      </section>
+      <section class="section">
+        <h2 class="section-title">Look</h2>
+        <div class="field-row"><div><label class="caption" for="colors">Colors</label><input class="input live" id="colors" type="number" min="2" max="256" value="256"></div><div><label class="caption" for="format">Format</label><select class="select live" id="format"><option value="png">PNG</option><option value="jpg">JPG</option></select></div></div>
+        <label class="caption" for="compression"><span>Compression</span><b id="level">6 / 9</b></label><input class="range live" id="compression" type="range" min="0" max="9" value="6">
+        <div class="switch-row"><span>Dithering</span><label class="switch"><input class="live" id="dither" type="checkbox"><span></span></label></div>
+      </section>
+      <a class="download disabled" id="download">Download result</a><div class="live-note">Changes render automatically</div>
+    </aside>
+    <section class="stage">
+      <div class="metrics"><div class="metric"><small>Original</small><strong id="originalSize">—</strong></div><div class="metric"><small>Result</small><strong id="resultSize">—</strong></div><div class="metric accent"><small>Reduction</small><strong id="reduction">—</strong></div></div>
+      <div class="compare">
+        <article class="viewer"><header class="viewer-head">Original <span id="originalMeta">No image</span></header><div class="canvas"><div class="empty" id="originalEmpty"><b>Waiting for source</b>Drop or select an image</div><img id="original" alt="Original image"></div></article>
+        <article class="viewer"><header class="viewer-head">Processed <span id="resultMeta">Live preview</span></header><div class="canvas" id="resultCanvas"><div class="empty" id="resultEmpty"><b>Your result appears here</b>Adjustments update automatically</div><img id="result" alt="Processed image"></div></article>
+      </div>
+    </section>
+  </main>
+</div>
+<script>
+const $=id=>document.getElementById(id);let sourceData="",sourceFile=null,timer=null,requestId=0,controller=null;
+const liveControls=[...document.querySelectorAll(".live")];
+$("compression").addEventListener("input",()=>{$("level").textContent=$("compression").value+" / 9"});
+liveControls.forEach(el=>el.addEventListener(el.type==="range"?"input":"change",schedule));
+["width","height","ar","colors"].forEach(id=>$(id).addEventListener("input",schedule));
+$("file").addEventListener("change",e=>e.target.files[0]&&loadFile(e.target.files[0]));
+const drop=$("drop");["dragenter","dragover"].forEach(type=>drop.addEventListener(type,e=>{e.preventDefault();drop.classList.add("drag")}));["dragleave","drop"].forEach(type=>drop.addEventListener(type,e=>{e.preventDefault();drop.classList.remove("drag")}));drop.addEventListener("drop",e=>e.dataTransfer.files[0]&&loadFile(e.dataTransfer.files[0]));
+async function loadFile(file){if(!file.type.startsWith("image/"))return setStatus("Unsupported file",true);sourceFile=file;sourceData=await readDataUrl(file);$("fileName").textContent=file.name;$("original").src=sourceData;$("originalEmpty").hidden=true;$("originalSize").textContent=formatBytes(file.size);const probe=new Image();probe.onload=()=>{$("originalMeta").textContent=`${probe.naturalWidth} × ${probe.naturalHeight}`};probe.src=sourceData;schedule(0)}
+function schedule(delay=420){if(!sourceData)return;clearTimeout(timer);timer=setTimeout(convert,delay)}
+async function convert(){const id=++requestId;controller?.abort();controller=new AbortController();setStatus("Rendering…");$("resultCanvas").classList.add("loading");try{const response=await fetch("/convert",{method:"POST",headers:{"Content-Type":"application/json"},signal:controller.signal,body:JSON.stringify({image:sourceData,width:$("width").value,height:$("height").value,aspectRatio:$("ar").value,colors:$("colors").value,format:$("format").value,compression:$("compression").value,dither:$("dither").checked})});const data=await response.json();if(!response.ok)throw Error(data.error||"Conversion failed");if(id!==requestId)return;const result=$("result");await new Promise((resolve,reject)=>{result.onload=resolve;result.onerror=()=>reject(Error("Preview could not be loaded"));result.src=data.url+"?v="+Date.now()});$("resultEmpty").hidden=true;$("resultSize").textContent=formatBytes(data.outputBytes);$("resultMeta").textContent=`${data.width} × ${data.height}`;const saved=data.inputBytes-data.outputBytes,pct=saved/data.inputBytes*100;$("reduction").textContent=pct>=0?`${pct.toFixed(1)}% · ${formatBytes(saved)} saved`:`${Math.abs(pct).toFixed(1)}% larger`;const dl=$("download");dl.href=data.downloadUrl;dl.classList.remove("disabled");setStatus("Preview up to date")}catch(error){if(error.name!=="AbortError"){setStatus(error.message,true);$("resultMeta").textContent="Error"}}finally{if(id===requestId)$("resultCanvas").classList.remove("loading")}}
+function setStatus(text,error=false){$("statusText").textContent=text;$("status").classList.toggle("live",!error&&text==="Preview up to date");$("statusText").classList.toggle("error",error)}function readDataUrl(file){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=reject;r.readAsDataURL(file)})}function formatBytes(bytes){const sign=bytes<0?"-":"";bytes=Math.abs(bytes);if(bytes<1024)return sign+bytes+" B";if(bytes<1048576)return sign+(bytes/1024).toFixed(1)+" KB";return sign+(bytes/1048576).toFixed(2)+" MB"}
+</script>
+</body>
+</html>
