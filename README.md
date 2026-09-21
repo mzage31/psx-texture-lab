@@ -41,6 +41,10 @@ http://127.0.0.1:8765
 
 Close the launcher window or press <kbd>Ctrl</kbd> + <kbd>C</kbd> to stop the server.
 
+### Updating
+
+Run **`update.cmd`** to check GitHub and download the latest version. It works with normal Git clones and copied project folders. Existing clones use a fast-forward-only pull so local work is not overwritten.
+
 ## Playground options
 
 | Option | Description |
@@ -118,6 +122,7 @@ When both width and height are supplied without `--ar`, the output uses those ex
 ```text
 python/
 ├── run.cmd                    # Installs dependencies when needed and starts the app
+├── update.cmd                 # Connects to GitHub and downloads updates
 ├── README.md
 └── app/
     ├── PSXTexture.py          # Image conversion and CLI

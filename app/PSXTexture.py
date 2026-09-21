@@ -43,10 +43,15 @@ def convert_to_psx_palette(input_path, output_path, colors, dither, width, heigh
         palette_limits = (256, 256, 192, 128, 96, 64, 48, 32, 24, 16)
         effective_colors = min(colors, palette_limits[compression_level])
 
-    # Quantize to palette
-    palette_img = img.quantize(
+    # Build the palette without diffusion, then apply it in a second pass.
+    # Pillow's one-pass palette generation does not reliably apply dithering.
+    generated_palette = img.quantize(
         colors=effective_colors,
         method=Image.Quantize.MEDIANCUT,
+        dither=Image.Dither.NONE
+    )
+    palette_img = img.quantize(
+        palette=generated_palette,
         dither=Image.Dither.FLOYDSTEINBERG if dither else Image.Dither.NONE
     )
 
